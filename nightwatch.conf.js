@@ -98,7 +98,7 @@ module.exports = {
 
       webdriver: {
         start_process: true,
-        server_path: '',
+        server_path: require("chromedriver").path,
         cli_args: [
           // --verbose
         ]

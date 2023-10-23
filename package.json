@@ -4,7 +4,8 @@
   "description": "for test purpose",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "report": "node utils/report.js"
   },
   "repository": {
     "type": "git",
