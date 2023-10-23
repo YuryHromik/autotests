@@ -1,0 +1,26 @@
+{
+  "name": "autotest",
+  "version": "1.0.0",
+  "description": "for test purpose",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YuryHromik"
+  },
+  "author": "Yury Hromik",
+  "license": "ISC",
+  "dependencies": {
+    "chromedriver": "^118.0.1",
+    "cucumber-html-reporter": "^7.1.1",
+    "nightwatch": "^3.2.1"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^10.0.1"
+  },
+  "directories": {
+    "test": "tests"
+  }
+}
