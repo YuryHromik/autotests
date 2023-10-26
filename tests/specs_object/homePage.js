@@ -59,7 +59,7 @@ When(/^Click Login button with "([^"]*)?"$/, async function (userNameValue) {
     let selector = selectorHelper.getLocator(homePage.loginButton, 5000);
     await browser.assert.visible(selector);
     if (userNameValue === "locked_out_user") {
-        throw new Error("User is locked out"); 
+        throw new Error("Test Passed. User is locked out !"); 
     }
 
     await webElement.click(selector);
