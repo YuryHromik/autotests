@@ -4,8 +4,6 @@ name: Production by feature tag
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
