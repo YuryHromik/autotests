@@ -18,9 +18,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Chrome
-        run: npm run chrome
-
       - name: Run tests
         run: npx nightwatch --env chrome --config nightwatch.conf.js  --format json:tests_output/cucumber_report.json --headless --tags "@Login"
         continue-on-error: true
