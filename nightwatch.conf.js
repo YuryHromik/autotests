@@ -1,7 +1,10 @@
-// Refer to the online docs for more details:
-// https://nightwatchjs.org/gettingstarted/configuration/
-//
+process.env.URL = "https://www.saucedemo.com";
+const Services = {};
+loadServices();
 
+// Refer to the online docs for more details:
+// https://nightwatchjs.org/guide/configuration/nightwatch-configuration-file.html
+//
 //  _   _  _         _      _                     _          _
 // | \ | |(_)       | |    | |                   | |        | |
 // |  \| | _   __ _ | |__  | |_ __      __  __ _ | |_   ___ | |__
@@ -10,6 +13,7 @@
 // \_| \_/|_| \__, ||_| |_| \__|  \_/\_/   \__,_| \__| \___||_| |_|
 //             __/ |
 //            |___/
+//
 
 module.exports = {
   // An array of folders (excluding subfolders) where your tests are located;
@@ -20,134 +24,187 @@ module.exports = {
   page_objects_path: ['tests/page_objects/'],
 
   // See https://nightwatchjs.org/guide/extending-nightwatch/adding-custom-commands.html
-  custom_commands_path: [],
+  custom_commands_path: "",
 
   // See https://nightwatchjs.org/guide/extending-nightwatch/adding-custom-assertions.html
-  custom_assertions_path: [],
+  custom_assertions_path: "",
 
-  // See https://nightwatchjs.org/guide/extending-nightwatch/adding-plugins.html
-  plugins: [],
-  
-  // See https://nightwatchjs.org/guide/concepts/test-globals.html
-  globals_path: '',
-  
+  // See https://nightwatchjs.org/guide/concepts/test-globals.html#external-test-globals
+  globals_path : "",
+
   webdriver: {},
+  
+  test_runner: {
+    type: "cucumber",
+    options: {
+        feature_path: "tests/features/*.feature",
+        additional_config: "",
+        //parallel: 2
+    }
 
-  test_workers: {
-    enabled: true
-  },
+},
 
   test_settings: {
     default: {
       disable_error_log: false,
-      launch_url: null,
+      launch_url: 'https://nightwatchjs.org',
 
       screenshots: {
-        enabled: true,
-        path: './screens',
+        enabled: false,
+        path: 'screens',
         on_failure: true
       },
 
       desiredCapabilities: {
-        browserName: 'chrome'
+        browserName : 'firefox'
       },
-      
+
       webdriver: {
         start_process: true,
         server_path: ''
-      },
-      
-      test_runner: {
-        // set cucumber as the runner
-        // For more info on using CucumberJS with Nightwatch, visit:
-        // https://nightwatchjs.org/guide/writing-tests/using-cucumberjs.html
-        type: 'cucumber',
-
-        // define cucumber specific options
-        options: {
-          //set the feature path
-          feature_path: 'tests/features/*.feature',
-
-          // start the webdriver session automatically (enabled by default)
-          // auto_start_session: true
-
-          // use parallel execution in Cucumber
-          // parallel: 2 // set number of workers to use (can also be defined in the cli as --parallel 2
-        }
       }
     },
-    
     chrome: {
       desiredCapabilities: {
-        browserName: 'chrome',
-        'goog:chromeOptions': {
-          // More info on Chromedriver: https://sites.google.com/a/chromium.org/chromedriver/
-          //
-          // w3c:false tells Chromedriver to run using the legacy JSONWire protocol (not required in Chrome 78)
-          w3c: true,
-          args: [
-            '--no-sandbox',
-            '--ignore-certificate-errors',
-            '--allow-insecure-localhost',
-            '--start-maximized',
-            'window-size=1920,1080' //2K
-            //'--headless'
+          browserName: "chrome",
+          "goog:chromeOptions": {
+              // More info on Chromedriver: https://sites.google.com/a/chromium.org/chromedriver/
+              //
+              // w3c:false tells Chromedriver to run using the legacy JSONWire protocol (not required in Chrome 78)
+              prefs: {
+                  download: {
+                      default_directory: require("path").resolve(__dirname + "/../download")
+                  }
+              },
+              w3c: true,
+              args: [
+                  '--no-sandbox',
+                  '--ignore-certificate-errors',
+                  '--allow-insecure-localhost',
+                  '--start-maximized',
+                  //'--headless',
+                  'window-size=1920,1080' //2K
+              ]
+          }
+      },
+
+      webdriver: {
+          start_process: true,
+          port: 4444,
+          server_path: require("chromedriver").path,
+          cli_args: [
+              // --verbose
           ]
+      }
+  },
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // Configuration for when using the SauceLabs cloud service                      |
+    //                                                                               |
+    // Please set the username and access key by setting the environment variables:  |
+    // - SAUCE_USERNAME                                                              |
+    // - SAUCE_ACCESS_KEY                                                            |
+    //////////////////////////////////////////////////////////////////////////////////
+    saucelabs: {
+      selenium: {
+        host: 'ondemand.saucelabs.com',
+        port: 443
+      },
+      // More info on configuring capabilities can be found on:
+      // https://docs.saucelabs.com/dev/test-configuration-options/
+      desiredCapabilities: {
+        'sauce:options' : {
+          username: '${SAUCE_USERNAME}',
+          accessKey: '${SAUCE_ACCESS_KEY}',
+          screenResolution: '1280x1024'
+          // https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/#--region
+          // region: 'us-west-1'
+          // https://docs.saucelabs.com/dev/test-configuration-options/#tunnelidentifier
+          // parentTunnel: '',
+          // tunnelIdentifier: '',
         }
       },
-
+      disable_error_log: false,
       webdriver: {
-        start_process: true,
-        server_path: require("chromedriver").path,
-        cli_args: [
-          // --verbose
-        ]
-      }
-    },
-    
-    ////////////////////////////////////////////////////////////////////////////////////////
-    // Configuration for using remote Selenium service or a cloud-based testing provider.  |
-    //                                                                                     |
-    // Please set the hostname and port of your remote selenium-server or cloud-provider   |
-    // (by setting the following properties in the configuration below):                   |
-    // - `selenium.host`                                                                   |
-    // - `selenium.port`                                                                   |
-    //                                                                                     |
-    // If you are using a cloud provider such as CrossBrowserTesting, LambdaTests, etc.,   |
-    // please set the username and access_key by setting the below environment variables:  |
-    // - REMOTE_USERNAME                                                                   |
-    // - REMOTE_ACCESS_KEY                                                                 |
-    // (.env files are supported)                                                          |
-    ////////////////////////////////////////////////////////////////////////////////////////
-    remote: {
-      // Info on all the available options with "selenium":
-      // https://nightwatchjs.org/guide/configuration/settings.html#selenium-server-settings
-      selenium: {
-        start_process: false,
-        server_path: '',
-        host: '<remote-hostname>',
-        port: 4444
-      },
-
-      username: '${REMOTE_USERNAME}',
-      access_key: '${REMOTE_ACCESS_KEY}',
-
-      webdriver: {
-        keep_alive: true,
         start_process: false
       }
     },
-    
-    'remote.chrome': {
-      extends: 'remote',
+    'saucelabs.chrome': {
+      extends: 'saucelabs',
       desiredCapabilities: {
         browserName: 'chrome',
-        'goog:chromeOptions': {
+        browserVersion: 'latest',
+        javascriptEnabled: true,
+        acceptSslCerts: true,
+        timeZone: 'London',
+        chromeOptions : {
           w3c: true
         }
       }
     },
-    
-  },
-  
+    'saucelabs.firefox': {
+      extends: 'saucelabs',
+      desiredCapabilities: {
+        browserName: 'firefox',
+        browserVersion: 'latest',
+        javascriptEnabled: true,
+        acceptSslCerts: true,
+        timeZone: 'London'
+      }
+    },
+    //////////////////////////////////////////////////////////////////////////////////
+    // Configuration for when using the Selenium service, either locally or remote,  |
+    //  like Selenium Grid                                                           |
+    //////////////////////////////////////////////////////////////////////////////////
+    selenium_server: {
+      // Selenium Server is running locally and is managed by Nightwatch
+      // Install the NPM package @nightwatch/selenium-server or download the selenium server jar file from https://github.com/SeleniumHQ/selenium/releases/, e.g.: selenium-server-4.1.1.jar
+      selenium: {
+        start_process: true,
+        port: 4444,
+        server_path: (Services.seleniumServer ? Services.seleniumServer.path : ""),
+        cli_args: {
+            "webdriver.gecko.driver": (Services.geckodriver ? Services.geckodriver.path : ""),
+            "webdriver.chrome.driver": (Services.chromedriver ? Services.chromedriver.path : "")
+        }
+    },
+      webdriver: {
+        start_process: false,
+        default_path_prefix: '/wd/hub'
+      }
+    },
+
+    'selenium.chrome': {
+      extends: 'selenium_server',
+      desiredCapabilities: {
+        browserName: 'chrome',
+        chromeOptions : {
+          w3c: true
+        }
+      }
+    },
+
+    'selenium.firefox': {
+      extends: 'selenium_server',
+      desiredCapabilities: {
+        browserName: 'firefox',
+        'moz:firefoxOptions': {
+          args: [
+            // '-headless',
+            // '-verbose'
+          ]
+        }
+      }
+    }
+  }
 };
+
+function loadServices() {
+  try {
+      Services.seleniumServer = require("selenium-server");
+  } catch (err) {}
+
+  try {
+      Services.chromedriver = require("chromedriver");
+  } catch (err) {}
+}
