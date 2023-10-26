@@ -1,5 +1,6 @@
 node_modules
 *.log
 tests_output/*.json
+tests_output/*.html
 .vscode
 package-lock.json
