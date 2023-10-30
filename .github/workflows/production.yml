@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npx nightwatch --env chrome --config nightwatch.conf.js  --format json:tests_output/cucumber_report.json --headless --tags "@Login"
+        run: npx nightwatch --env chrome --config nightwatch.conf.js  --format json:tests_output/cucumber_report.json --headless --tags "@Demo"
         continue-on-error: true
 
       - name: Create HTML Report
