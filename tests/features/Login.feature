@@ -1,5 +1,5 @@
 Feature: Login/Logout
-@Demo @Login
+@Demo @Login @L-1
 
 Scenario: Verify that user can login and logout with all default wrap credentials
 

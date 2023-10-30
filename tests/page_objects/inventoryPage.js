@@ -18,26 +18,12 @@ const inventoryPage = {
         },
     },
 
+    elementInventoryItemSelector: ".inventory_item",
     productNameSelector: ".inventory_item_name",
     productPriceSelector: ".inventory_item_price",
     productDescriptionSelector: ".inventory_item_desc",
     addToCartButtonSelector: ".btn_inventory",
-    removeFromCartButtonSelector: ".inventory_item_price",
-    
-    getAllProductsInfo: function () {
-        const productElements = browser.elements("css selector", this.productNameSelector).value;
-        const productsInfo = [];
-        for (let index = 0; index < productElements.length; index++) {
-            const product = {
-                name: browser.elementIdText(productElements[index].ELEMENT).value,
-                price: browser.elementIdText(browser.elements("css selector", this.productPriceSelector).value[index].ELEMENT).value,
-                description: browser.elementIdText(browser.elements("css selector", this.productDescriptionSelector).value[index].ELEMENT).value
-            };
-            productsInfo.push(product);
-        }
-        return productsInfo;
-    },
-
+    removeFromCartButtonSelector: ".btn_inventory",
 
     burgerMenu: {
         menuButton: "#react-burger-menu-btn",
