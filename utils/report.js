@@ -7,7 +7,7 @@ var options = {
     reportSuiteAsScenarios: true,
     scenarioTimestamp: true,
     launchReport: true,
-    brandTitle: '<span style="color:green;font-weight:bold;">MakeMake team</span>'
+    brandTitle: '<span style="color:green;font-weight:bold;">Yury Hromik Demo</span>'
 };
 
 reporter.generate(options);
